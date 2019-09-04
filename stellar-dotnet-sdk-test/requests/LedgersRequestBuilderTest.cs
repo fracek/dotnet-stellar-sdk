@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using stellar_dotnet_sdk;
@@ -40,12 +41,27 @@ namespace stellar_dotnet_sdk_test.requests
         }
 
         [TestMethod]
-        public void TestStream()
+        public async Task TestStream()
         {
-            var json = File.ReadAllText(Path.Combine("testdata", "ledger.json"));
-            var streamableTest = new StreamableTest<LedgerResponse>(json, LedgerDeserializeTest.AssertTestData);
+            var json = File.ReadAllText(Path.Combine("testdata", "ledger.json"))
+                .Replace(Environment.NewLine, "");
+            var fakeHandler = new FakeHttpMessageHandler();
+            var stream = $"event: open\ndata: hello\n\nid: 1234\ndata: {json}\n\n";
+            fakeHandler.QueueResponse(FakeResponse.StartsStream(StreamAction.Write(stream)));
 
-            streamableTest.AssertIsValid();
+            var eventSource = new SSEEventSource(new Uri("http://test.com"),
+                builder => builder.MessageHandler(fakeHandler));
+
+            LedgerResponse dataReceived = null;
+            eventSource.Message += (sender, args) =>
+            {
+                dataReceived = JsonSingleton.GetInstance<LedgerResponse>(args.Data);
+                eventSource.Shutdown();
+            };
+
+            await eventSource.Connect();
+
+            LedgerDeserializeTest.AssertTestData(dataReceived);
         }
     }
 }
