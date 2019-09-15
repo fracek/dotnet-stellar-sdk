@@ -2,7 +2,7 @@ trigger:
   - master
 
 jobs:
-  - job: dotnet-core
+  - job: dotnet_core
     strategy:
       matrix:
         linux:
