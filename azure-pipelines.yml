@@ -48,12 +48,13 @@ jobs:
       - task: VSBuild@1
         inputs:
           solution: '$(solution)'
-          msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+          msbuildArgs: '/Framework:.NETFramework,Version=v4.7.1 /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
           platform: '$(buildPlatform)'
           configuration: '$(buildConfiguration)'
 
       - task: VSTest@2
         inputs:
           solution: '$(solution)'
+          msbuildArgs: '/Framework:.NETFramework,Version=v4.7.1'
           platform: '$(buildPlatform)'
           configuration: '$(buildConfiguration)'
