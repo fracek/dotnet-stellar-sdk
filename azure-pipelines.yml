@@ -33,6 +33,8 @@ jobs:
           arguments: --configuration Release
 
   - job: vs2017
+    pool:
+      vmImage: vs2017-win2016
     variables:
       solution: './stellar-dotnet-sdk.sln'
       buildPlatform: 'Any CPU'
