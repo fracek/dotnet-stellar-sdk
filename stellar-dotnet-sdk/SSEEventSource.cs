@@ -41,9 +41,9 @@ namespace stellar_dotnet_sdk
 
         public event EventHandler<EventSource.StateChangeEventArgs> StateChange;
 
-        public Task Connect()
+        public async Task Connect()
         {
-            return _eventSource.StartAsync();
+            await _eventSource.StartAsync().ConfigureAwait(false);
         }
 
         public void Dispose()

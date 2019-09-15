@@ -47,7 +47,7 @@ namespace stellar_dotnet_sdk_test.requests
             });
             var task = _requestBuilder.Stream(handler).Connect();
             var timeoutTask = Task.Delay(TimeSpan.FromSeconds(5.0));
-            var completedTask = await Task.WhenAny(task, timeoutTask);
+            var completedTask = await Task.WhenAny(task, timeoutTask).ConfigureAwait(false);
             if (completedTask != task)
             {
                 throw new Exception("Task did not complete.");
