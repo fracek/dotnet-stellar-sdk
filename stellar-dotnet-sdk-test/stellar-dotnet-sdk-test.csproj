@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <IsPackable>false</IsPackable>
     <RootNamespace>stellar_dotnet_sdk_test</RootNamespace>
+    <RuntimeFrameworkVersion>2.1</RuntimeFrameworkVersion>
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
