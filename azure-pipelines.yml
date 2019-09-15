@@ -1,32 +1,33 @@
 trigger:
   - master
-strategy:
-  matrix:
-    linux:
-      imageName: 'ubuntu-16.04'
-    mac:
-      imageName: 'macos-10.13'
-    windows:
-      imageName: 'vs2017-win2016'
 
-pool:
-  vmImage: $(imageName)
-
-variables:
-  buildConfiguration: 'Release'
-steps:
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '2.1.x'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: restore
-- task: DotNetCoreCLI@2
-  inputs:
-    command: build
-    arguments: --configuration Release
-- task: DotNetCoreCLI@2
-  inputs:
-    command: test
-    arguments: --configuration Release
+jobs:
+  - job: dotnet-core
+    strategy:
+      matrix:
+        linux:
+          imageName: 'ubuntu-16.04'
+        mac:
+          imageName: 'macos-10.13'
+        windows:
+          imageName: 'vs2017-win2016'
+    pool:
+      vmImage: $(imageName)
+    variables:
+      buildConfiguration: 'Release'
+    steps:
+      - task: UseDotNet@2
+        inputs:
+          packageType: 'sdk'
+          version: '2.1.x'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: restore
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: build
+          arguments: --configuration Release
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: test
+          arguments: --configuration Release
